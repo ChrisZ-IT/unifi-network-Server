@@ -1,0 +1,130 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: unifi-network-server
+  name: unifi-network-server
+  namespace: unifi
+spec:
+  replicas: 1
+  strategy:
+      type: Recreate
+  selector:
+    matchLabels:
+      app: unifi-network-server
+  template:
+    metadata:
+      labels:
+        app: unifi-network-server
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - unifi-network-server
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: unifi-network-server
+        image: docker.io/ubuntu:26.04
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DEBIAN_FRONTEND
+          value: "noninteractive"
+        - name: MONGODB_VER
+          value: "8.0"
+        - name: TZ
+          value: "America/Denver"
+        volumeMounts:
+        - name: unifi-init-script
+          mountPath: /app/scripts
+        - name: unifi-network-server-volume
+          mountPath: /var/lib/unifi
+        ports:
+        - containerPort: 3478
+          name: 3478-udp
+          protocol: UDP
+        - containerPort: 5514
+          name: 5514-udp
+          protocol: UDP
+        - containerPort: 5671
+          name: 5671-tcp
+          protocol: TCP
+        # - containerPort: 6789
+        #   name: 6789-tcp
+        #   protocol: TCP
+        - containerPort: 8080
+          name: 8080-tcp
+          protocol: TCP
+        - containerPort: 8443
+          name: 8443-tcp
+          protocol: TCP
+        - containerPort: 8444
+          name: 8444-tcp
+          protocol: TCP
+        - containerPort: 8843
+          name: 8843-tcp
+          protocol: TCP
+        # - containerPort: 8880
+        #   name: 8880-tcp
+        #   protocol: TCP
+        # - containerPort: 8881
+        #   name: 8881-tcp
+        #   protocol: TCP
+        # - containerPort: 8882
+        #   name: 8882-tcp
+        #   protocol: TCP
+        - containerPort: 1900
+          name: 1900-udp
+          protocol: UDP
+        - containerPort: 10001
+          name: 10001-udp
+          protocol: UDP
+        - containerPort: 10101
+          name: 10101-udp
+          protocol: UDP
+        # - containerPort: 27117
+        #   name: 27117-tcp
+        #   protocol: TCP
+        command: ["/bin/sh", "-c"]
+        args: ["/app/scripts/init.sh $(MONGODB_VER)"]
+        startupProbe:
+          httpGet:
+            path: /status
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          failureThreshold: 40        
+        readinessProbe:
+          httpGet:
+            path: /status
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+      volumes:
+        - name: unifi-init-script
+          configMap:
+            name: unifi-network-server-configmap
+            defaultMode: 0755
+        - name: unifi-network-server-volume
+          persistentVolumeClaim:
+            claimName: unifi-network-server-pvc
