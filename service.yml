@@ -29,7 +29,7 @@ spec:
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: awx-server-certs
+      credentialName: unifi-server-certs
     hosts:
     - unifi.domain.local
 
