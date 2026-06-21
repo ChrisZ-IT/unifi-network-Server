@@ -8,17 +8,12 @@ Im going to preface this readme with a short note. I get this isn't how you shou
 
 ## How I set this up and how it all works
 
-
-
-Each of my K8s nodes have an NFS mount back to my storage(`/opt/persistent_volumes/unifi` in this case)
-I mount my unifi config/database to this shared storage so when I restart my pod my data is still there.
-
-I only deploy 1 instance at a time since unifi manages the MongoDB data and puts a lock on the database, but unifi does not really need to be HA since configs are stored on the devices it manages. So it can be down for 2-3 minutes while a new pod is spun up.
+I only deploy 1 instance at a time since unifi manages the MongoDB data and puts a lock on the database, but unifi does not really need to be HA since configs are stored on the devices it manages. So it can be down for 2-3 minutes while a new pod is spun up. I use an nfs persistent volume to allow this pod to go on any of my worker nodes.
 
 
 Next problem to solve was device discovery.
 
-Since unifi likes to just use udp packets on the same subnet to discover devices this would not work correctly since the pod network is different then my device subnet. I made things much harder here by wanting to use isto ingress for my webgui. I could of just put everything into the loadballancer config and been done with it but I wanted signed certs for the webgui in a codified way. 
+Since unifi likes to just use udp packets on the same subnet to discover devices this would not work correctly since the pod network is different then my device subnet. I made things much harder here by wanting to use isto ingress for my webgui. I could of just put everything into the loadballancer config and been done with it but I wanted signed certs for the webgui in a codified way.
 
 To get device discovery working I added an option to my dhcp server to hand out the loadballancer's IP.
 I use OPNSence and Kea DHCP. Add option 43, Encoded as `hex` and the set data is just the hex value of the LB IP `0104C0A800CB`(192.168.0.203) in this case. You can then add this option to the whole subnet or if you are like me and add dhcp reservations up for network devices like these, you can add the option to each reservation.
