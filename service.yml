@@ -29,9 +29,9 @@ spec:
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: awx-server-certs
+      credentialName: unifi-server-certs
     hosts:
-    - unifi.punkhardcore.local
+    - unifi.domain.local
 
 ---
 apiVersion: networking.istio.io/v1beta1
@@ -41,7 +41,7 @@ metadata:
   namespace: unifi
 spec:
   hosts:
-  - unifi.punkhardcore.local
+  - unifi.domain.local
   gateways:
   - unifi-gateway
   http:
