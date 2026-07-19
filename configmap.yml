@@ -6,7 +6,7 @@ metadata:
 data:
   init.sh: |
     #!/bin/sh
-    
+
     echo "Patching OS"
     apt update && apt upgrade -y
     apt install --no-install-recommends -y curl gnupg ca-certificates apt-transport-https gpg -y
@@ -28,7 +28,7 @@ data:
 
     echo "Starting Unifi Server"
     service unifi stop && service unifi start
-    
+
     if [ -f /var/log/unifi/server.log ]; then
         exec tail -f /var/log/unifi/server.log
     else

@@ -29,9 +29,9 @@ spec:
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: unifi-server-certs
+      credentialName: unifi-cert-request
     hosts:
-    - unifi.domain.local
+    - unifi.${DOMAIN_NAME}
 
 ---
 apiVersion: networking.istio.io/v1beta1
@@ -41,7 +41,7 @@ metadata:
   namespace: unifi
 spec:
   hosts:
-  - unifi.domain.local
+  - unifi.${DOMAIN_NAME}
   gateways:
   - unifi-gateway
   http:
