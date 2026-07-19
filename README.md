@@ -20,6 +20,8 @@ I use OPNSence and Kea DHCP. Add option 43, Encoded as `hex` and the set data is
 
 If done correctly your Unifi controller should now be running in K8s and will migrate between workers as it needs to. Offers more flexibility then a static vm.
 
+I am using envsubst to append my env vars in my configs.
+- DOMAIN_NAME
 
 ## Conclusion
 At the time of doing this project Ubiquiti is really pushing people to Unifi OS. Unifi OS is a standalone installer that installs podman that then runs unifi controller with in containers there. On paper this is really cool because they are finally doing containerization. But the reason I find it frustrating is they are using a private container registry to store their images and not a registry you can just use(requires an auth token baked into their installer that you cant access). I just want to call them in my deployment.yml and then just mount my own storage ::pleading:: Maybe Ubiquiti will just publish their images to google or docker hub someday ::shrug::
