@@ -24,7 +24,7 @@ I am using envsubst to append my env vars in my configs.
 - example:
     ```
     export DOMAIN_NAME=domain.local
-    envsubst < certificate.yml | k apply -f -
+    cat *.yml | envsubst | k apply -f -
     ```
 
 ## Conclusion
