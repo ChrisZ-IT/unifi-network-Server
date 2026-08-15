@@ -11,18 +11,21 @@ data:
     apt update && apt upgrade -y
     apt install --no-install-recommends -y curl gnupg ca-certificates apt-transport-https gpg -y
 
-    # Add Unifi repo
-    curl -fsSL https://dl.ui.com/unifi/unifi-repo.gpg | gpg -o /usr/share/keyrings/unifi-repo.gpg --dearmor \
-    && echo 'deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/unifi-repo.gpg ] https://www.ui.com/downloads/unifi/debian stable ubiquiti' | \
-    tee /etc/apt/sources.list.d/100-ubnt-unifi.list
+    # # Add Unifi repo
+    curl "https://dl.ui.com/unifi/$1/unifi_sysvinit_all.deb" -o unifi.deb
+
+    # curl -fsSL https://dl.ui.com/unifi/unifi-repo.gpg | gpg -o /usr/share/keyrings/unifi-repo.gpg --dearmor \
+    # && echo 'deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/unifi-repo.gpg ] https://www.ui.com/downloads/unifi/debian stable ubiquiti' | \
+    # tee /etc/apt/sources.list.d/100-ubnt-unifi.list
 
     # Add Mongodb repo
-    curl -fsSL https://pgp.mongodb.com/server-$1.asc | gpg -o /usr/share/keyrings/mongodb-server-$1.gpg --dearmor \
-    && echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-$1.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/$1 multiverse" | \
-    tee /etc/apt/sources.list.d/mongodb-org-$1.list
+    curl -fsSL https://pgp.mongodb.com/server-$2.asc | gpg -o /usr/share/keyrings/mongodb-server-$2.gpg --dearmor \
+    && echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-$2.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/$2 multiverse" | \
+    tee /etc/apt/sources.list.d/mongodb-org-$2.list
 
     echo "Installing Unifi Server"
-    apt update && apt install --no-install-recommends unifi -y
+    apt update && apt install --no-install-recommends ./unifi.deb -y
+    # apt update && apt install --no-install-recommends unifi -y
 
     sleep 30
 
