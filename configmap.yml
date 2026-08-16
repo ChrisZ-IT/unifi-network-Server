@@ -8,7 +8,7 @@ data:
     #!/bin/sh
 
     # echo "Patching OS"
-    # apt update && apt upgrade -y
+    apt update && apt upgrade -y
     # apt install --no-install-recommends -y curl gnupg ca-certificates apt-transport-https gpg -y
 
     # # # Add Unifi repo
