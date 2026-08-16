@@ -35,10 +35,10 @@ spec:
         env:
         - name: DEBIAN_FRONTEND
           value: "noninteractive"
-        - name: UNIFI_VER
-          value: "10.5.67"
-        - name: MONGODB_VER
-          value: "8.0"
+        # - name: UNIFI_VER
+        #   value: "10.5.67"
+        # - name: MONGODB_VER
+        #   value: "8.0"
         - name: TZ
           value: "America/Denver"
         volumeMounts:
@@ -93,7 +93,8 @@ spec:
         #   name: 27117-tcp
         #   protocol: TCP
         command: ["/bin/sh", "-c"]
-        args: ["/app/scripts/init.sh $(UNIFI_VER) $(MONGODB_VER)"]
+        args: ["/app/scripts/init.sh"]
+        # args: ["/app/scripts/init.sh $(UNIFI_VER) $(MONGODB_VER)"]
         startupProbe:
           httpGet:
             path: /status
