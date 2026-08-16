@@ -30,7 +30,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
       - name: unifi-network-server
-        image: docker.io/ubuntu:26.04
+        image: docker.io/chriszit/unifi-network-server:10.5.67
         imagePullPolicy: IfNotPresent
         env:
         - name: DEBIAN_FRONTEND
