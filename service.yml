@@ -22,7 +22,7 @@ metadata:
   namespace: unifi
 spec:
   selector:
-    istio: ingressgateway
+    istio: ingress
   servers:
   - port:
       number: 443
