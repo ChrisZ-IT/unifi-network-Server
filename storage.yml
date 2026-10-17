@@ -3,10 +3,8 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: nfs-storage
-  namespace: unifi
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: Immediate
-
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -28,7 +26,6 @@ spec:
   nfs:
     path: /volume1/kubernetes_volumes/unifi
     server: 192.168.0.110
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
