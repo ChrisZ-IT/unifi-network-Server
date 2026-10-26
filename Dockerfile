@@ -1,6 +1,6 @@
 FROM debian:stable-slim
 
-ARG UNIFI_VER="10.6.106"
+ARG UNIFI_VER="10.6.109"
 ARG MONGODB_VER="8.0"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
