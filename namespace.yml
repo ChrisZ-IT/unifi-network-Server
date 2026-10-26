@@ -5,3 +5,5 @@ metadata:
   labels:
     istio-injection: enabled
   name: unifi
+  annotations:
+    kubectl.kubernetes.io/delete-policy: "Prevent"
